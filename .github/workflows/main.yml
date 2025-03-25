@@ -18,7 +18,7 @@ jobs:
 
       - name: Check for Image Changes
         id: check_changes
-        uses: tj-actions/changed-files@v31
+        uses: tj-actions/changed-files@v46
         with:
           files: |
             static/images/*
