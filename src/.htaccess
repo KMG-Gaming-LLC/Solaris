@@ -1,0 +1,38 @@
+
+# Enable the RewriteEngine
+RewriteEngine On
+
+# Custom 404 error page
+ErrorDocument 404 /404.html
+
+# Redirect specific old pages to new pages
+# Redirect 301 /old-page.html /new-page.html
+# Redirect 301 /another-old-page.html /another-new-page.html
+
+# Optional: Redirect www to non-www (or vice versa)
+# Uncomment the following lines if you want to enforce www or non-www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Optional: Disable directory browsing
+Options -Indexes
+
+# Optional: Set default character encoding
+AddDefaultCharset UTF-8
+
+# Optional: Cache control for static files
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+</IfModule>
