@@ -2,5 +2,6 @@ Flask
 Flask-RESTful 
 Flask-SQLAlchemy 
 Flask-Migrate
+python-dotenv
 psutil
-dotenv
+Werkzeug
