@@ -75,10 +75,10 @@ def serve_file(filename):
     return send_from_directory(BASE_DIR, filename)
 
 if __name__ == '__main__':
-    scripts = ['script1.py', 'script2.py', 'script3.py']
+    scripts = ['config.py', 'server.py']
     runner = ScriptRunner(scripts)
     runner.start_scripts()
 
     host = '0.0.0.0'
-    port = 5000
+    port = 8000
     app.run(host=host, port=port, debug=True)
