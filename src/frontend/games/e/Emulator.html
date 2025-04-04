@@ -325,24 +325,15 @@ color: white;
   </div>
 </div>
 <script>
- 
- 
       window.addEventListener('load', function() {
-
-        
-
-        //document.getElementById('loadingcontainer').style.opacity = 0
         setTimeout(() => {
-        //  document.getElementById('loadingcontainer').style.display = 'none'
         }, 800);
         donewithload()
       });
     function skipload() {
       donewithload()
     }
-
     function donewithload() {
-     
       const elements = document.querySelectorAll('.cover-row');
       elements.forEach((element, index) => {
         setTimeout(() => {
@@ -373,82 +364,38 @@ color: white;
 
 
 <iframe frameBorder="0" id="game" style="text-align: center; align-items: center; overflow: hidden; width: 100%; " src="" allowfullscreen></iframe>
-
-<!--h2 onclick="window.location = 'https://sz-games.github.io'" style="display: none; cursor: pointer; position: fixed; bottom: -20px;  ">Back</h2>
-<h2  style="position: fixed; bottom: 10px;">____</h2>
-<h2 onclick="makeFullScreen()" style="cursor: pointer; position: fixed; bottom: 20px;">Fullscreen</h2-->
 <div style="cursor: pointer; position: fixed; border-radius: 15px; color: rgb(224, 224, 224); background-color: #1d1d1dc0; left: 0; bottom: 0px; margin: 10px;" id="Menu">
-
-
-<span class="material-icons buttonForMenu" style="margin: 5px;" onclick="window.location = 'https://sz-games.github.io'" >
-  arrow_back
-  </span>
-  <span class="material-icons buttonForMenu" style="margin: 5px;" onclick="makeFullScreen()" >
-    fullscreen
-    </span>
-</div>
+<span class="material-icons buttonForMenu" style="margin: 5px;" onclick="window.location = 'https://sz-games.github.io'" >arrow_back</span>
+  <span class="material-icons buttonForMenu" style="margin: 5px;" onclick="makeFullScreen()" >fullscreen</span></div>
   </body>
-
   <script>
-
-
-
 var isFUll = false
-
 document.body.onkeyup = function(e) {
   if( e.keyCode == 27 ) {
-    if(isFUll) {
-    //document.getElementById('game').style.width = '800px';
-    }
-  }
-}
-
+    if(isFUll) {}}}
 function requestFullScreen(element) {
-    // Supports most browsers and their versions.
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
-    
-    if (requestMethod) { // Native full screen.
+    if (requestMethod) {
         requestMethod.call(element);
         let hh = window.innerHeight;
-
 document.getElementById('game').height = hh;
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+    } else if (typeof window.ActiveXObject !== "undefined") {
         var wscript = new ActiveXObject("WScript.Shell");
         if (wscript !== null) {
-            wscript.SendKeys("{F11}");
-        }
-    }
-}
+            wscript.SendKeys("{F11}");}}}
 var canvas = document.getElementById('game');
-
 function makeFullScreen() {
-
     isFUll = true
-    requestFullScreen(canvas);
-}
-
-
-
+    requestFullScreen(canvas);}
 let hh = window.innerHeight;
-
-
 document.getElementById('game').height = hh;
 window.onresize = function(event) {
   let hh = window.innerHeight;
-
-document.getElementById('game').height = hh;
-}
-// Get the text element
+document.getElementById('game').height = hh;}
 var textElement = document.getElementById("game");
-
-// Get the current URL
 var currentUrl = new URL(window.location.href);
-
-// Check for the presence of the "text" parameter in the URL
 if (currentUrl.searchParams.has("game")) {
-  // Set the text of the element to the value of the "text" parameter
-  textElement.src = currentUrl.searchParams.get("game");
-}
+  textElement.src = currentUrl.searchParams.get("game");}
 console.log(currentUrl.searchParams.get("game"))
   </script>
 </html>
