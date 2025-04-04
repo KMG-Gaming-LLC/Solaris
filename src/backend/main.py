@@ -42,7 +42,7 @@ class ReviewResource(Resource):
 
 
 # Flask Application Setup
-app = Flask(__name__, template_folder='src/frontend/')
+app = Flask(__name__)  # No need to specify template_folder now
 app.config.from_object('config')
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 db.init_app(app)
@@ -77,11 +77,11 @@ def status():
 # Home Route
 @app.route('/')
 def home():
-    return render_template('index.html')  # This will now look for index.html in src/frontend
+    return render_template('index.html')  # This will now look for index.html in the templates directory
 
 
 # Serve Static Files
-BASE_DIR = os.path.join(os.getcwd(), 'src', 'frontend')
+BASE_DIR = os.path.join(os.getcwd(), 'src', 'templates')  # Update this if needed
 @app.route('/<path:filename>', methods=['GET'])
 def serve_file(filename):
     return send_from_directory(BASE_DIR, filename)
@@ -106,9 +106,9 @@ class ScriptRunner:
 
 # Main Execution
 if __name__ == '__main__':
-#    scripts = ['src/backend/config.py', 'src/backend/server.py']  # Adjust paths as necessary
-#    runner = ScriptRunner(scripts)
-#    runner.start_scripts()
+    scripts = ['src/backend/config.py', 'src/backend/server.py']  # Adjust paths as necessary
+    runner = ScriptRunner(scripts)
+    runner.start_scripts()
 
     host = '0.0.0.0'
     port = 8000
