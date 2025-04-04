@@ -1,19 +1,92 @@
-# https://discord.gg/AE38RbwkmT space4life discord dont join
-
-import flask
 import os
 import threading
 import psutil
-import dotenv
-
+from flask import Flask, jsonify, render_template, send_from_directory, request
+from flask_restful import Api, Resource
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask import Flask, jsonify, render_template, send_from_directory
 from dotenv import load_dotenv
-from flask_restful import Api
-from models import db
-from resources.review import ReviewResource
+from models import db, Review
 
 
+# Review Resource Class
+class ReviewResource(Resource):
+    def get(self):
+        reviews = Review.query.all()
+        return [{'id': r.id, 'game_title': r.game_title, 'review_text': r.review_text, 'rating': r.rating} for r in reviews], 200
+
+    def post(self):
+        json_data = request.get_json(force=True)
+        new_review = Review(game_title=json_data['game_title'], review_text=json_data['review_text'], rating=json_data['rating'])
+        db.session.add(new_review)
+        db.session.commit()
+        return {'message': 'Review created', 'id': new_review.id}, 201
+
+    def put(self, review_id):
+        json_data = request.get_json(force=True)
+        review = Review.query.get(review_id)
+        if not review:
+            return {'message': 'Review not found'}, 404
+        review.game_title = json_data['game_title']
+        review.review_text = json_data['review_text']
+        review.rating = json_data['rating']
+        db.session.commit()
+        return {'message': 'Review updated'}, 200
+
+    def delete(self, review_id):
+        review = Review.query.get(review_id)
+        if not review:
+            return {'message': 'Review not found'}, 404
+        db.session.delete(review)
+        db.session.commit()
+        return {'message': 'Review deleted'}, 204
+
+
+# Flask Application Setup
+app = Flask(__name__)
+app.config.from_object('config')
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+db.init_app(app)
+
+# API Setup
+api = Api(app)
+api.add_resource(ReviewResource, '/reviews', '/reviews/<int:review_id>')
+
+
+# Status Route
+@app.route('/status', methods=['GET'])
+def status():
+    cpu_usage = psutil.cpu_percent(interval=1)
+    memory_info = psutil.virtual_memory()
+    memory_usage = memory_info.percent
+    disk_info = psutil.disk_usage('/')
+    disk_usage = disk_info.percent
+
+    status_data = {
+        'cpu_usage': cpu_usage,
+        'memory_usage': memory_usage,
+        'disk_usage': disk_usage,
+        'total_memory': memory_info.total,
+        'available_memory': memory_info.available,
+        'total_disk': disk_info.total,
+        'available_disk': disk_info.free
+    }
+
+    return jsonify(status_data)
+
+# Home Route
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
+# Serve Static Files
+BASE_DIR = os.path.join(os.getcwd(), 'src', 'frontend')
+@app.route('/<path:filename>', methods=['GET'])
+def serve_file(filename):
+    return send_from_directory(BASE_DIR, filename)
+
+
+# Script Runner Class
 class ScriptRunner:
     def __init__(self, scripts):
         self.scripts = scripts
@@ -27,53 +100,10 @@ class ScriptRunner:
             thread = threading.Thread(target=self.run_script, args=(script,))
             thread.start()
             self.threads.append(thread)
-        print("Scripts 1-3 are running!")
-
-app = Flask(__name__)
+        print("Scripts are running!")
 
 
-app.config.from_object('config')
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
-db.init_app(app)
-
-
-BASE_DIR = os.path.join(os.getcwd(), 'src', 'frontend')
-
-
-@app.route('/status', methods=['GET'])
-def status():
-    # Get CPU usage
-    cpu_usage = psutil.cpu_percent(interval=1)
-    
-    # Get memory usage
-    memory_info = psutil.virtual_memory()
-    memory_usage = memory_info.percent
-    
-    # Get disk usage
-    disk_info = psutil.disk_usage('/')
-    disk_usage = disk_info.percent
-    
-    # Prepare the status data
-    status_data = {
-        'cpu_usage': cpu_usage,
-        'memory_usage': memory_usage,
-        'disk_usage': disk_usage,
-        'total_memory': memory_info.total,
-        'available_memory': memory_info.available,
-        'total_disk': disk_info.total,
-        'available_disk': disk_info.free
-    }
-    
-    return jsonify(status_data)
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/<path:filename>', methods=['GET'])
-def serve_file(filename):
-    return send_from_directory(BASE_DIR, filename)
-
+# Main Execution
 if __name__ == '__main__':
     scripts = ['config.py', 'server.py']
     runner = ScriptRunner(scripts)
