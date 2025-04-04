@@ -42,7 +42,7 @@ class ReviewResource(Resource):
 
 
 # Flask Application Setup
-app = Flask(__name__, template_folder='src/frontend')  # Specify the frontend directory for templates
+app = Flask(__name__, template_folder='src/frontend/')
 app.config.from_object('config')
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 db.init_app(app)
@@ -106,9 +106,9 @@ class ScriptRunner:
 
 # Main Execution
 if __name__ == '__main__':
-    scripts = ['src/backend/config.py', 'src/backend/server.py']  # Adjust paths as necessary
-    runner = ScriptRunner(scripts)
-    runner.start_scripts()
+#    scripts = ['src/backend/config.py', 'src/backend/server.py']  # Adjust paths as necessary
+#    runner = ScriptRunner(scripts)
+#    runner.start_scripts()
 
     host = '0.0.0.0'
     port = 8000
