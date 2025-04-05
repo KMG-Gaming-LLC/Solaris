@@ -1,8 +1,6 @@
 import os
-import threading
 import psutil
-from flask import Flask, jsonify, render_template, request, send_from_directory, abort
-
+from flask import Flask, jsonify, render_template, send_from_directory, abort
 from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 
@@ -12,7 +10,6 @@ app = Flask(__name__)
 app.config.from_object('config')
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 
-# life sucks
 @app.route('/status', methods=['GET'])
 def status():
     cpu_usage = psutil.cpu_percent(interval=1)
@@ -34,7 +31,10 @@ def status():
 @app.route('/<path:filename>', methods=['GET'])
 def serve_file(filename):
     templates_dir = os.path.join(app.root_path, 'templates')
-    return send_from_directory(templates_dir, filename)
+    try:
+        return send_from_directory(templates_dir, filename)
+    except FileNotFoundError:
+        abort(404)
 
 @app.route('/')
 def home():
