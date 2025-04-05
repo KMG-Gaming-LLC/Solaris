@@ -106,7 +106,7 @@ class ScriptRunner:
 
 # Main Execution
 if __name__ == '__main__':
-    scripts = ['src/backend/config.py', 'src/backend/server.py']  # Adjust paths as necessary
+    scripts = ['/src/backend/config.py', '/src/backend/server.py']  # Adjust paths as necessary
     runner = ScriptRunner(scripts)
     runner.start_scripts()
 
