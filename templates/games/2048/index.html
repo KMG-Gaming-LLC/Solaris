@@ -3,45 +3,8 @@
 
 <head>
   <meta charset="utf-8">
-      <title>Google</title>
-<script>
-        // Array of objects containing favicons and titles
-        const items = [
-            { favicon: 'https://thebombgamer.github.io/img/favicon1.ico', title: 'Classes' },
-            { favicon: 'https://thebombgamer.github.io/img/favicon2.ico', title: 'Google Drive' },
-            { favicon: 'https://thebombgamer.github.io/img/favicon3.ico', title: 'Google  Docs' },
-            { favicon: 'https://thebombgamer.github.io/img/favicon4.ico',title: 'Google Classroom' }
-        ];
-
-        // Function to set random favicon and title
-        function setRandomFaviconAndTitle() {
-            // Randomly select an item
-            const randomItem = items[Math.floor(Math.random() * items.length)];
-
-            // Set the favicon
-            const link = document.createElement('link');
-            link.rel = 'icon';
-            link.href = randomItem.favicon;
-            document.head.appendChild(link);
-
-            // Set the title
-            document.title = randomItem.title;
-        }
-
-        // Call the function on page load
-        window.onload = setRandomFaviconAndTitle;
-    </script>
-<meta charset="UTF-8" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GCZE5JC1NR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-GCZE5JC1NR');
-</script>
-
+  <title>2048 | Kyle Hosting</title>
+  <script src="https://kyle-hosting.xyz/solaris.js"></script>
   <link href="style/main.css" rel="stylesheet" type="text/css">
   <link rel="apple-touch-icon" href="meta/apple-touch-icon.png">
   <link rel="apple-touch-startup-image" href="meta/apple-touch-startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone 5+ -->
@@ -71,7 +34,7 @@
       <div class="game-message">
         <p></p>
         <div class="lower">
-	        <a class="keep-playing-button">Keep going</a>
+          <a class="keep-playing-button">Keep going</a>
           <a class="retry-button">Try again</a>
         </div>
       </div>
@@ -124,5 +87,4 @@
   <script src="js/game_manager.js"></script>
   <script src="js/application.js"></script>
 </body>
-
 </html>
