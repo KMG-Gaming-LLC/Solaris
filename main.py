@@ -2,7 +2,7 @@ import os
 import threading
 import psutil
 from flask import Flask, jsonify, render_template, request, send_from_directory, abort
-from flask_restful import Api, Resource
+
 from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 
@@ -12,8 +12,6 @@ app = Flask(__name__)
 app.config.from_object('config')
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 
-api = Api(app)
-api.add_resource(ReviewResource, '/reviews', '/reviews/<int:review_id>')
 
 @app.route('/status', methods=['GET'])
 def status():
