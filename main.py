@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 
-
+# life sucks
 @app.route('/status', methods=['GET'])
 def status():
     cpu_usage = psutil.cpu_percent(interval=1)
