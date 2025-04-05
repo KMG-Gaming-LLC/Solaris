@@ -1,12 +1,14 @@
 import os
 import threading
 import psutil
-from flask import Flask, jsonify, render_template, send_from_directory, request
+from flask import Flask, jsonify, render_template, request, send_from_directory, abort
 from flask_restful import Api, Resource
 from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 from models import db, Review
 
+# Load environment variables
+load_dotenv()
 
 # Review Resource Class
 class ReviewResource(Resource):
@@ -40,9 +42,8 @@ class ReviewResource(Resource):
         db.session.commit()
         return {'message': 'Review deleted'}, 204
 
-
 # Flask Application Setup
-app = Flask(__name__)  # No need to specify template_folder now
+app = Flask(__name__)
 app.config.from_object('config')
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 db.init_app(app)
@@ -50,7 +51,6 @@ db.init_app(app)
 # API Setup
 api = Api(app)
 api.add_resource(ReviewResource, '/reviews', '/reviews/<int:review_id>')
-
 
 # Status Route
 @app.route('/status', methods=['GET'])
@@ -73,19 +73,17 @@ def status():
 
     return jsonify(status_data)
 
+# Serve all files from the templates directory
+@app.route('/<path:filename>', methods=['GET'])
+def serve_file(filename):
+    # Ensure the requested file is within the templates directory
+    templates_dir = os.path.join(app.root_path, 'templates')
+    return send_from_directory(templates_dir, filename)
 
 # Home Route
 @app.route('/')
 def home():
-    return render_template('index.html')  # This will now look for index.html in the templates directory
-
-
-# Serve Static Files
-BASE_DIR = os.path.join(os.getcwd(), 'src', 'templates')  # Update this if needed
-@app.route('/<path:filename>', methods=['GET'])
-def serve_file(filename):
-    return send_from_directory(BASE_DIR, filename)
-
+    return render_template('index.html')  # Flask will look for index.html in the templates directory
 
 # Script Runner Class
 class ScriptRunner:
@@ -95,6 +93,7 @@ class ScriptRunner:
 
     def run_script(self, script):
         exec(open(script).read())
+        pass
 
     def start_scripts(self):
         for script in self.scripts:
@@ -102,7 +101,6 @@ class ScriptRunner:
             thread.start()
             self.threads.append(thread)
         print("Scripts are running!")
-
 
 # Main Execution
 if __name__ == '__main__':
