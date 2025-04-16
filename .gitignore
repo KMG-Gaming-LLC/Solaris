@@ -1,3 +1,10 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+*.egg-info
 .env
 empty
 .vscode/
